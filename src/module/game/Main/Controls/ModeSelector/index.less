@@ -1,0 +1,32 @@
+.controls {
+    > .mode {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        column-gap: 10px;
+
+        > .selector {
+            width: calc((100% - 40px) / 3);
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            border: 1px solid #2d3748;
+            background-color: #2d3748;
+            color: white;
+            border-radius: 5px;
+            position: relative;
+
+            > .tool-tip {
+                position: absolute;
+                background-color: white;
+                color: #2d3748;
+                border: 1px solid #2d3748;
+                width: 40%;
+                line-height: 24px;
+                border-radius: 5rem;
+                top: -30%;
+                right: -10%;
+            }
+        }
+    }
+}

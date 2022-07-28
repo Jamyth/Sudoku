@@ -1,4 +1,5 @@
 export type SudokuBoard = (number | null)[][];
+export type CompleteSudokuBoard = number[][];
 
 export enum Difficulty {
     EASY = "EASY",
@@ -7,7 +8,7 @@ export enum Difficulty {
     VERY_HARD = "VERY_HARD",
 }
 
-function assertPuzzle(numbers: number[][]) {
+function assertPuzzle(numbers: SudokuBoard) {
     const isPuzzle = numbers.length === 9 && numbers.every((_) => _.length === 9);
 
     if (!isPuzzle) {
@@ -35,10 +36,10 @@ function sliceToEnd(numbers: number[], interval = 3): number[] {
     return [...array, ...head];
 }
 
-function generatePuzzle(): number[][] {
+function generatePuzzle(): CompleteSudokuBoard {
     const firstRow = generateNumber();
     // const firstRow = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    const puzzle: number[][] = [firstRow];
+    const puzzle: CompleteSudokuBoard = [firstRow];
 
     for (let i = 1; i < 9; i++) {
         const index = i < 3 ? i - 1 : i - 3;
@@ -53,9 +54,9 @@ function generatePuzzle(): number[][] {
 /**
  * From Left to Right, Top to Bottom
  */
-function toGrid(puzzle: number[][]) {
+function toGrid(puzzle: CompleteSudokuBoard) {
     assertPuzzle(puzzle);
-    const grids: number[][] = [];
+    const grids: CompleteSudokuBoard = [];
     for (let y = 0; y < 9; y += 3) {
         for (let x = 0; x < 9; x += 3) {
             const grid: number[] = [];
@@ -76,12 +77,12 @@ function toGrid(puzzle: number[][]) {
     return grids;
 }
 
-function toColumns(puzzle: number[][]): number[][] {
+function toColumns(puzzle: SudokuBoard): (number | null)[][] {
     assertPuzzle(puzzle);
-    const columns: number[][] = [];
+    const columns: SudokuBoard = [];
 
     for (let i = 0; i < 9; i++) {
-        const column: number[] = [];
+        const column: (number | null)[] = [];
         let index = 0;
         while (index < 9) {
             column.push(puzzle[index++][i]);
@@ -92,7 +93,7 @@ function toColumns(puzzle: number[][]): number[][] {
     return columns;
 }
 
-function isValidPuzzle(puzzle: number[][]): boolean {
+function isValidPuzzle(puzzle: CompleteSudokuBoard): boolean {
     assertPuzzle(puzzle);
     const isRowCorrect = puzzle.every(isValid);
     const isColumnCorrect = toColumns(puzzle).every(isValid);
@@ -101,12 +102,12 @@ function isValidPuzzle(puzzle: number[][]): boolean {
     return isRowCorrect && isColumnCorrect && isGridCorrect;
 }
 
-function columnsToPuzzle(columns: number[][]): number[][] {
+function columnsToPuzzle(columns: SudokuBoard): SudokuBoard {
     assertPuzzle(columns);
-    const puzzle: number[][] = [];
+    const puzzle: SudokuBoard = [];
 
     for (let i = 0; i < 9; i++) {
-        const row: number[] = [];
+        const row: (number | null)[] = [];
         let index = 0;
         while (index < 9) {
             row.push(columns[index++][i]);
@@ -117,13 +118,13 @@ function columnsToPuzzle(columns: number[][]): number[][] {
     return puzzle;
 }
 
-function isValid(numbers: number[]): boolean {
+function isValid(numbers: (number | null)[]): boolean {
     return Array.from(new Set([...numbers])).length === 9;
 }
 
-function cipherPuzzle(puzzle: number[][]): number[][] {
+function cipherPuzzle(puzzle: CompleteSudokuBoard): SudokuBoard {
     assertPuzzle(puzzle);
-    let clonedPuzzle: number[][] = JSON.parse(JSON.stringify(puzzle));
+    let clonedPuzzle: SudokuBoard = JSON.parse(JSON.stringify(puzzle));
     const combination = [
         [0, 1],
         [0, 2],
@@ -158,7 +159,7 @@ function cipherPuzzle(puzzle: number[][]): number[][] {
     return clonedPuzzle;
 }
 
-function solvable(_puzzle: SudokuBoard, _row = 0, _column = 0): { solvable: boolean; answer: number[][] } {
+function solvable(_puzzle: SudokuBoard, _row = 0, _column = 0): { solvable: boolean; answer: CompleteSudokuBoard } {
     const puzzle: SudokuBoard = JSON.parse(JSON.stringify(_puzzle));
     let row = _row;
     let column = _column;
@@ -182,11 +183,11 @@ function solvable(_puzzle: SudokuBoard, _row = 0, _column = 0): { solvable: bool
     for (let value = 1; value <= 9; value++) {
         if (canSafeAssign(puzzle, row, column, value)) {
             puzzle[row][column] = value;
-
-            if (solvable(puzzle, row, column + 1)) {
+            const result = solvable(puzzle, row, column + 1);
+            if (result.solvable) {
                 return {
                     solvable: true,
-                    answer: puzzle as number[][],
+                    answer: result.answer,
                 };
             }
         }
@@ -248,7 +249,7 @@ function createPuzzle(difficulty: Difficulty): SudokuBoard {
 
     let playablePuzzle = removeDigit(puzzle, digitToRemove);
 
-    while (!solvable(playablePuzzle)) {
+    while (!solvable(playablePuzzle).solvable) {
         playablePuzzle = removeDigit(puzzle, digitToRemove);
     }
 
@@ -274,7 +275,34 @@ function removeDigit(_puzzle: SudokuBoard, numberToRemove: number): SudokuBoard 
 function log(puzzle: SudokuBoard) {
     puzzle.forEach((_) => {
         console.info(_.join(" | "));
+        console.info("-   -   -   -   -   -   -   -   -");
     });
+}
+
+function hasDuplicate(board: SudokuBoard, row: number, column: number): boolean {
+    const value = board[row][column];
+
+    if (value === null) {
+        return false;
+    }
+
+    const columns = toColumns(board);
+    const currentColumn = columns[column];
+    const currentRow = board[row];
+
+    if (row === 8) console.info(column);
+
+    if (row === 8 && column === 8) {
+        console.info(columns);
+        console.info(currentColumn);
+        console.info(currentRow);
+    }
+
+    // BUG
+    const isRowDuplicate = currentColumn.some((_, index) => _ === value && index !== row);
+    const isColumnDuplicate = currentRow.some((_, index) => _ === value && index !== column);
+
+    return isRowDuplicate || isColumnDuplicate;
 }
 
 export const SudokuUtil = Object.freeze({
@@ -289,4 +317,5 @@ export const SudokuUtil = Object.freeze({
     solvable,
     createPuzzle,
     log,
+    hasDuplicate,
 });

@@ -1,7 +1,7 @@
 import { SudokuUtil } from "./SudokuUtil";
 import type { SudokuBoard, Difficulty } from "./SudokuUtil";
 
-interface InteractSudoku {
+export interface InteractSudoku {
     value: number | null;
     isGenerated: boolean;
     row: number;
@@ -48,9 +48,23 @@ function translateActionMode(mode: ActionMode): string {
     }
 }
 
+function getInteractSudokuOf(board: PlayableSudokuBoard, value: number): InteractSudoku[] {
+    const sudoku: InteractSudoku[] = [];
+    board.forEach((_) => {
+        _.forEach((_) => {
+            if (_.value === value) {
+                sudoku.push(_);
+            }
+        });
+    });
+
+    return sudoku;
+}
+
 export const GameUtil = Object.freeze({
     toPureSudokuBoard,
     toPlayableSudokuBoard,
     createBoard,
     translateActionMode,
+    getInteractSudokuOf,
 });

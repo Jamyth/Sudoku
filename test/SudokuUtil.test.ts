@@ -1,6 +1,6 @@
 import { SudokuUtil, Difficulty } from "../src/util/SudokuUtil";
 import { describe, it } from "mocha";
-import * as assert from "assert/strict";
+import { strict as assert } from "assert";
 
 describe("SudokuUtil", () => {
     const dummyPuzzle = [
@@ -13,6 +13,18 @@ describe("SudokuUtil", () => {
         [3, 4, 5, 6, 7, 8, 9, 1, 2],
         [6, 7, 8, 9, 1, 2, 3, 4, 5],
         [9, 1, 2, 3, 4, 5, 6, 7, 8],
+    ];
+
+    const puzzle = [
+        [null, null, null, null, null, null, 6, null, 9],
+        [1, null, null, null, null, 4, null, null, null],
+        [null, null, 5, 3, null, 6, 8, 2, 1],
+        [null, null, 4, 6, 7, null, null, 5, null],
+        [null, null, 7, null, null, null, 9, null, null],
+        [null, null, null, 5, 4, null, null, null, null],
+        [3, 7, null, 4, null, 5, 2, null, 6],
+        [null, null, null, null, null, null, 5, 1, null],
+        [null, 6, null, null, 2, null, null, 3, 7],
     ];
 
     it("generates numbers without duplication", () => {
@@ -69,7 +81,7 @@ describe("SudokuUtil", () => {
         const columns = SudokuUtil.toColumns(dummyPuzzle);
         const puzzle = SudokuUtil.columnsToPuzzle(columns);
 
-        assert.deepEqual(puzzle, dummyPuzzle);
+        assert.deepStrictEqual(puzzle, dummyPuzzle);
     });
     it("cipher correctly", () => {
         const cipheredPuzzle = SudokuUtil.cipherPuzzle(dummyPuzzle);
@@ -79,6 +91,37 @@ describe("SudokuUtil", () => {
     it("create playable puzzle", () => {
         const puzzle = SudokuUtil.createPuzzle(Difficulty.VERY_HARD);
 
-        SudokuUtil.log(puzzle);
+        // SudokuUtil.log(puzzle);
+    });
+
+    it("solve the puzzle", (done) => {
+        const answer = SudokuUtil.solvable(puzzle);
+
+        // SudokuUtil.log(answer.answer);
+        done();
+    });
+
+    it("find duplicate value", () => {
+        const dummyPuzzle = [
+            [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            [4, 2, 6, 7, 8, 9, 1, 2, 3],
+            [7, 8, 9, 1, 2, 3, 4, 5, 6],
+            [2, 3, 4, 5, 6, 7, 8, 9, 1],
+            [5, 6, 7, 8, 9, 1, 2, 3, 4],
+            [8, 9, 1, 2, 3, 4, 5, 6, 7],
+            [3, 4, 5, 6, 7, 8, 9, 1, 2],
+            [6, 7, 8, 9, 1, 2, 3, 4, 5],
+            [9, 1, 2, 3, 4, 5, 6, 7, 8],
+        ];
+        // value 2 has duplicate in row 2 and column 2
+        const hasDuplicateBoth = SudokuUtil.hasDuplicate(dummyPuzzle, 1, 1);
+        const hasDuplicateRow = SudokuUtil.hasDuplicate(dummyPuzzle, 0, 1);
+        const hasDuplicateColumn = SudokuUtil.hasDuplicate(dummyPuzzle, 1, 0);
+        const dontHaveDuplicate = SudokuUtil.hasDuplicate(dummyPuzzle, 0, 0);
+
+        assert.deepEqual(hasDuplicateBoth, true);
+        assert.deepEqual(hasDuplicateRow, true);
+        assert.deepEqual(hasDuplicateColumn, true);
+        assert.deepEqual(dontHaveDuplicate, false);
     });
 });

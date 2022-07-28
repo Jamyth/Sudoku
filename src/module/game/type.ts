@@ -1,13 +1,14 @@
-import type { PlayableSudokuBoard, ActionMode } from "util/GameUtil";
-import type { Difficulty } from "../../util/SudokuUtil";
+import type { PlayableSudokuBoard, ActionMode, InteractSudoku } from "util/GameUtil";
+import type { Difficulty, CompleteSudokuBoard } from "../../util/SudokuUtil";
 
 export type Path = "/";
 
 export interface State {
     board: null | PlayableSudokuBoard;
-    selectedNumber: number | null;
-    selectedCell: [row: number, column: number] | null;
-    selectedMode: ActionMode | null;
+    answer: CompleteSudokuBoard | null;
+    selectedCell: InteractSudoku | null;
+    selectedMode: ActionMode.DRAFT | null;
+    tipsQuota: number;
 }
 
 export interface HistoryState {

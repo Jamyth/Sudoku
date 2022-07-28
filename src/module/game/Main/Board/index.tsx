@@ -1,30 +1,25 @@
 import React from "react";
-import { useModuleGameState } from "../hooks";
+import { useModuleGameState } from "module/game/hooks";
 import { Box } from "@chakra-ui/react";
+import { Cell } from "./Cell";
 
 export const Board = React.memo(() => {
     const board = useModuleGameState((state) => state.board);
     const size = (window.innerWidth - 30) / 9;
 
-    const cellStyle: React.CSSProperties = {
-        width: size,
-        height: size,
-        lineHeight: `${size}px`,
-    };
-
     if (!board) {
         return <div>loading...</div>;
     }
 
+    console.info(board);
+
     return (
         <Box bgColor="gray.200" className="board">
-            {board.map((row, index) => {
+            {board.map((column, index) => {
                 return (
                     <div className="row" key={index}>
-                        {row.map((_, index) => (
-                            <div className={`cell ${_.isGenerated ? "generated" : ""}`} key={index} style={cellStyle}>
-                                {_.value}
-                            </div>
+                        {column.map((cell, index) => (
+                            <Cell cell={cell} key={index} size={size} />
                         ))}
                     </div>
                 );
