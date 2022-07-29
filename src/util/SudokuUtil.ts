@@ -312,7 +312,7 @@ function hasDuplicate(board: SudokuBoard, row: number, column: number): boolean 
     const currentRow = board[row];
 
     const isRowDuplicate = currentColumn.some((_, index) => _ === value && index !== row);
-    const isColumnDuplicate = currentRow.some((_, index) => _ === value && index !== row);
+    const isColumnDuplicate = currentRow.some((_, index) => _ === value && index !== column);
 
     return isRowDuplicate || isColumnDuplicate;
 }

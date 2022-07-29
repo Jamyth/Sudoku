@@ -1,0 +1,40 @@
+import React from "react";
+import { Drawer, DrawerOverlay, DrawerContent, DrawerBody } from "@chakra-ui/react";
+import { Difficulty, SudokuUtil } from "util/SudokuUtil";
+import { EnumUtil } from "@iamyth/util";
+import { useMainState } from "module/main/hooks";
+import { actions as mainActions } from "module/main";
+import "./index.less";
+
+export const ActionDrawer = React.memo(() => {
+    const isOpen = useMainState((state) => state.drawerOpened);
+
+    return (
+        <Drawer placement="bottom" isOpen={isOpen !== false} onClose={() => {}}>
+            <div className="action-drawer">
+                <DrawerOverlay zIndex={1500} />
+                <DrawerContent className="test" zIndex={1500} background="transparent" padding="0 15px">
+                    <DrawerBody padding="0">
+                        <div className="action-drawer-body">
+                            <div className="difficulty-selector">
+                                {EnumUtil.toArray(Difficulty).map((_) => (
+                                    <div className="button" key={_} onClick={() => mainActions.toGame(_)}>
+                                        {SudokuUtil.difficultyTranslate(_)}
+                                    </div>
+                                ))}
+                                {typeof isOpen !== "boolean" && (
+                                    <div className="button" onClick={() => mainActions.toGame(isOpen)}>
+                                        重新開始
+                                    </div>
+                                )}
+                            </div>
+                            <div className="button" onClick={mainActions.closeDrawer}>
+                                取消
+                            </div>
+                        </div>
+                    </DrawerBody>
+                </DrawerContent>
+            </div>
+        </Drawer>
+    );
+});

@@ -2,35 +2,38 @@ import { Module, register } from "react-shiba";
 import { Main } from "./Main";
 import type { InteractSudoku } from "util/GameUtil";
 import { ActionMode, GameUtil } from "util/GameUtil";
-import { Difficulty } from "util/SudokuUtil";
+import { actions as mainActions } from "module/main";
 import type { Location } from "react-shiba";
 import type { State, Path, HistoryState } from "./type";
 import { ArrayUtil } from "@iamyth/util";
 
 const initialState: State = {
+    difficulty: null,
     board: null,
     answer: null,
     selectedCell: null,
     selectedMode: null,
-    tipsQuota: 3,
+    tipsQuota: 81,
     errorCount: 3,
     isVictory: false,
 };
 
 class ModuleGameModule extends Module<Path, State> {
     override onLocationMatched(routeParams: object, location: Location<HistoryState>): void {
-        // TODO/Jamyth
-        const difficulty = location.state?.difficulty ?? Difficulty.MEDIUM;
+        const difficulty = location.state?.difficulty;
 
         if (!difficulty) {
             this.pushHistory("/");
+            return;
         }
 
         const { board, answer } = GameUtil.createBoard(difficulty);
 
         this.setState({
+            ...initialState,
             board,
             answer,
+            difficulty,
         });
     }
 
@@ -71,8 +74,8 @@ class ModuleGameModule extends Module<Path, State> {
             let randomColumn = Math.floor(Math.random() * 8);
             let cell = board[randomRow][randomColumn];
             while (cell.isGenerated || cell.value !== null) {
-                randomRow = Math.floor(Math.random() * 8);
-                randomColumn = Math.floor(Math.random() * 8);
+                randomRow = Math.floor(Math.random() * 9);
+                randomColumn = Math.floor(Math.random() * 9);
                 cell = board[randomRow][randomColumn];
             }
 
@@ -88,6 +91,7 @@ class ModuleGameModule extends Module<Path, State> {
                 };
                 state.tipsQuota--;
             });
+            this.checkIsVictory();
         }
     }
 
@@ -112,7 +116,7 @@ class ModuleGameModule extends Module<Path, State> {
             return;
         }
 
-        const selectedCell: InteractSudoku = JSON.parse(JSON.stringify(this.state.selectedCell));
+        const selectedCell: InteractSudoku = JSON.parse(JSON.stringify(rawCell));
         const { row, column } = selectedCell;
 
         if (!board || !answer) {
@@ -139,13 +143,25 @@ class ModuleGameModule extends Module<Path, State> {
             state.selectedCell = cell;
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- checked
             state.board![row][column] = cell;
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- checked
-            state.isVictory = GameUtil.isVictory(state.board!, state.answer!);
         });
+
+        this.checkIsVictory();
+    }
+
+    checkIsVictory() {
+        const { board, answer, difficulty } = this.state;
+        if (!board || !answer || !difficulty) {
+            return;
+        }
+        const isVictory = GameUtil.isVictory(board, answer);
+        if (isVictory) {
+            mainActions.completeGame(difficulty);
+        }
+        this.setState({ isVictory });
     }
 }
 
-const moduleGameModule = register(new ModuleGameModule("/", initialState));
+const moduleGameModule = register(new ModuleGameModule("/game", initialState));
 export const useState = moduleGameModule.getState();
 export const actions = moduleGameModule.getActions();
 export const MainComponent = moduleGameModule.attachLifecycle(Main);

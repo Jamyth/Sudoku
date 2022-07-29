@@ -1,9 +1,10 @@
 import type { PlayableSudokuBoard, ActionMode, InteractSudoku } from "util/GameUtil";
 import type { Difficulty, CompleteSudokuBoard } from "../../util/SudokuUtil";
 
-export type Path = "/";
+export type Path = "/game";
 
 export interface State {
+    difficulty: Difficulty | null;
     board: null | PlayableSudokuBoard;
     answer: CompleteSudokuBoard | null;
     selectedCell: InteractSudoku | null;

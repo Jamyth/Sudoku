@@ -114,14 +114,10 @@ describe("SudokuUtil", () => {
             [9, 1, 2, 3, 4, 5, 6, 7, 8],
         ];
         // value 2 has duplicate in row 2 and column 2
-        const hasDuplicateBoth = SudokuUtil.hasDuplicate(dummyPuzzle, 1, 1);
-        const hasDuplicateRow = SudokuUtil.hasDuplicate(dummyPuzzle, 0, 1);
-        const hasDuplicateColumn = SudokuUtil.hasDuplicate(dummyPuzzle, 1, 0);
+        const hasDuplicate = SudokuUtil.hasDuplicate(dummyPuzzle, 1, 1);
         const dontHaveDuplicate = SudokuUtil.hasDuplicate(dummyPuzzle, 0, 0);
 
-        assert.deepEqual(hasDuplicateBoth, true);
-        assert.deepEqual(hasDuplicateRow, true);
-        assert.deepEqual(hasDuplicateColumn, true);
+        assert.deepEqual(hasDuplicate, true);
         assert.deepEqual(dontHaveDuplicate, false);
     });
 
