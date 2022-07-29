@@ -9,6 +9,8 @@ export interface State {
     selectedCell: InteractSudoku | null;
     selectedMode: ActionMode.DRAFT | null;
     tipsQuota: number;
+    errorCount: number;
+    isVictory: boolean;
 }
 
 export interface HistoryState {

@@ -6,6 +6,7 @@ export enum Difficulty {
     MEDIUM = "MEDIUM",
     HARD = "HARD",
     VERY_HARD = "VERY_HARD",
+    HELL = "HELL",
 }
 
 function assertPuzzle(numbers: SudokuBoard) {
@@ -164,7 +165,7 @@ function solvable(_puzzle: SudokuBoard, _row = 0, _column = 0): { solvable: bool
     let row = _row;
     let column = _column;
 
-    if (row === 8 && column === 8) {
+    if (row === 8 && column === 9) {
         return {
             solvable: true,
             answer: puzzle as number[][],
@@ -234,16 +235,19 @@ function createPuzzle(difficulty: Difficulty): SudokuBoard {
 
     switch (difficulty) {
         case Difficulty.EASY:
-            digitToRemove = 15;
+            digitToRemove = 42;
             break;
         case Difficulty.MEDIUM:
-            digitToRemove = 35;
+            digitToRemove = 51;
             break;
         case Difficulty.HARD:
-            digitToRemove = 45;
+            digitToRemove = 60;
             break;
         case Difficulty.VERY_HARD:
-            digitToRemove = 64;
+            digitToRemove = 65;
+            break;
+        case Difficulty.HELL:
+            digitToRemove = 69;
             break;
     }
 
@@ -305,6 +309,21 @@ function hasDuplicate(board: SudokuBoard, row: number, column: number): boolean 
     return isRowDuplicate || isColumnDuplicate;
 }
 
+function difficultyTranslate(difficulty: Difficulty): string {
+    switch (difficulty) {
+        case Difficulty.EASY:
+            return "容易";
+        case Difficulty.MEDIUM:
+            return "中等";
+        case Difficulty.HARD:
+            return "困難";
+        case Difficulty.VERY_HARD:
+            return "專家";
+        case Difficulty.HELL:
+            return "邪惡";
+    }
+}
+
 export const SudokuUtil = Object.freeze({
     generateNumber,
     sliceToEnd,
@@ -318,4 +337,5 @@ export const SudokuUtil = Object.freeze({
     createPuzzle,
     log,
     hasDuplicate,
+    difficultyTranslate,
 });

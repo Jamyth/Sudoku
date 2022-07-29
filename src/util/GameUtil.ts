@@ -1,5 +1,6 @@
-import { SudokuUtil } from "./SudokuUtil";
+import { CompleteSudokuBoard, SudokuUtil } from "./SudokuUtil";
 import type { SudokuBoard, Difficulty } from "./SudokuUtil";
+import { ArrayUtil } from "@iamyth/util";
 
 export interface InteractSudoku {
     value: number | null;
@@ -37,6 +38,13 @@ function toPlayableSudokuBoard(board: SudokuBoard): PlayableSudokuBoard {
     );
 }
 
+function isVictory(board: PlayableSudokuBoard, answer: CompleteSudokuBoard): boolean {
+    const boardNumbers = toPureSudokuBoard(board).reduce((acc, curr) => [...acc, ...curr], []);
+    const answerNumbers = answer.reduce((acc, curr) => [...acc, ...curr], []);
+
+    return ArrayUtil.areSame(boardNumbers, answerNumbers, true);
+}
+
 function translateActionMode(mode: ActionMode): string {
     switch (mode) {
         case ActionMode.CLEAN:
@@ -67,4 +75,5 @@ export const GameUtil = Object.freeze({
     createBoard,
     translateActionMode,
     getInteractSudokuOf,
+    isVictory,
 });

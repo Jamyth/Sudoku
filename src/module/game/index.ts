@@ -13,6 +13,8 @@ const initialState: State = {
     selectedCell: null,
     selectedMode: null,
     tipsQuota: 3,
+    errorCount: 3,
+    isVictory: false,
 };
 
 class ModuleGameModule extends Module<Path, State> {
@@ -34,14 +36,59 @@ class ModuleGameModule extends Module<Path, State> {
     }
 
     selectMode(mode: ActionMode) {
-        const { selectedMode } = this.state;
+        const { selectedMode, selectedCell, board, answer, tipsQuota } = this.state;
+
+        if (!board || !answer) {
+            return;
+        }
+
+        const isFinishedBoard = GameUtil.toPureSudokuBoard(board)
+            .reduce((acc, curr) => {
+                return [...acc, ...curr];
+            }, [])
+            .every((_) => _ !== null);
+
         if (mode === ActionMode.DRAFT) {
             this.setState({ selectedMode: selectedMode === mode ? null : mode });
             return;
         }
 
-        if (mode === ActionMode.CLEAN) {
-            //
+        if (mode === ActionMode.CLEAN && selectedCell !== null) {
+            this.setState((state) => {
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- checked
+                const cell = state.selectedCell!;
+                state.selectedCell = {
+                    ...cell,
+                    value: cell.isGenerated ? cell.value : null,
+                    draft: [],
+                };
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- checked
+                state.board![cell.row][cell.column] = state.selectedCell;
+            });
+        }
+
+        if (mode === ActionMode.TIPS && !isFinishedBoard && tipsQuota > 0) {
+            let randomRow = Math.floor(Math.random() * 8);
+            let randomColumn = Math.floor(Math.random() * 8);
+            let cell = board[randomRow][randomColumn];
+            while (cell.isGenerated || cell.value !== null) {
+                randomRow = Math.floor(Math.random() * 8);
+                randomColumn = Math.floor(Math.random() * 8);
+                cell = board[randomRow][randomColumn];
+            }
+
+            const value = answer[randomRow][randomColumn];
+            this.setState((state) => {
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- checked
+                state.board![randomRow][randomColumn] = {
+                    value,
+                    isGenerated: true,
+                    row: randomRow,
+                    column: randomColumn,
+                    draft: [],
+                };
+                state.tipsQuota--;
+            });
         }
     }
 
@@ -60,6 +107,7 @@ class ModuleGameModule extends Module<Path, State> {
         const board = this.state.board;
         const isDraftMode = this.state.selectedMode !== null;
         const rawCell = this.state.selectedCell;
+        const answer = this.state.answer;
 
         if (!rawCell) {
             return;
@@ -68,11 +116,12 @@ class ModuleGameModule extends Module<Path, State> {
         const selectedCell: InteractSudoku = JSON.parse(JSON.stringify(this.state.selectedCell));
         const { row, column } = selectedCell;
 
-        if (!board) {
+        if (!board || !answer) {
             return;
         }
 
         let cell: InteractSudoku;
+        const correctAnswer = answer[selectedCell.row][selectedCell.column];
 
         if (isDraftMode) {
             const draft = ArrayUtil.toggleElement(selectedCell.draft, value);
@@ -87,9 +136,12 @@ class ModuleGameModule extends Module<Path, State> {
             };
         }
         this.setState((state) => {
+            state.errorCount = value === correctAnswer ? state.errorCount : state.errorCount - 1;
             state.selectedCell = cell;
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- checked
             state.board![row][column] = cell;
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- checked
+            state.isVictory = GameUtil.isVictory(state.board!, state.answer!);
         });
     }
 }
