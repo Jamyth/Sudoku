@@ -11,8 +11,6 @@ export const Board = React.memo(() => {
         return <div>loading...</div>;
     }
 
-    console.info(board);
-
     return (
         <Box bgColor="gray.200" className="board">
             {board.map((column, index) => {

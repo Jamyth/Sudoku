@@ -20,10 +20,9 @@ export const Cell = React.memo(({ cell, size }: Props) => {
     const answer = useModuleGameState((state) => state.answer![row][column]);
     const pureBoard = GameUtil.toPureSudokuBoard(playableBoard);
     const selectedCell = useModuleGameState((state) => state.selectedCell);
+    const isSelected = selectedCell?.row === row && selectedCell?.column === column;
+    const isSameNumber = cell.value !== null && selectedCell?.value === cell.value;
     const hasError = (cell.value !== null && cell.value !== answer) || SudokuUtil.hasDuplicate(pureBoard, row, column);
-    const isSelected =
-        (selectedCell?.row === row && selectedCell?.column === column) ||
-        (cell.value !== null && selectedCell?.value === cell.value);
 
     const draftSize = size / 3 - 1;
 
@@ -41,7 +40,7 @@ export const Cell = React.memo(({ cell, size }: Props) => {
         <div
             onClick={onClick}
             style={cellStyle}
-            className={`cell ${isSelected ? "selected" : ""} ${cell.isGenerated ? "generated" : ""} ${
+            className={`cell ${isSelected || isSameNumber ? "selected" : ""} ${cell.isGenerated ? "generated" : ""} ${
                 hasError ? "error" : ""
             }`}
         >

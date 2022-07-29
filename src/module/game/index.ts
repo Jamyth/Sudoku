@@ -2,7 +2,7 @@ import { Module, register } from "react-shiba";
 import { Main } from "./Main";
 import type { InteractSudoku } from "util/GameUtil";
 import { ActionMode, GameUtil } from "util/GameUtil";
-import { Difficulty, SudokuUtil } from "util/SudokuUtil";
+import { Difficulty } from "util/SudokuUtil";
 import type { Location } from "react-shiba";
 import type { State, Path, HistoryState } from "./type";
 import { ArrayUtil } from "@iamyth/util";
@@ -26,8 +26,7 @@ class ModuleGameModule extends Module<Path, State> {
             this.pushHistory("/");
         }
 
-        const board = GameUtil.createBoard(difficulty);
-        const answer = SudokuUtil.solvable(GameUtil.toPureSudokuBoard(board)).answer;
+        const { board, answer } = GameUtil.createBoard(difficulty);
 
         this.setState({
             board,

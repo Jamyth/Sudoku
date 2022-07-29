@@ -55,12 +55,12 @@ function generatePuzzle(): CompleteSudokuBoard {
 /**
  * From Left to Right, Top to Bottom
  */
-function toGrid(puzzle: CompleteSudokuBoard) {
+function toGrid(puzzle: SudokuBoard) {
     assertPuzzle(puzzle);
-    const grids: CompleteSudokuBoard = [];
+    const grids: SudokuBoard = [];
     for (let y = 0; y < 9; y += 3) {
         for (let x = 0; x < 9; x += 3) {
-            const grid: number[] = [];
+            const grid: (number | null)[] = [];
             grid.push(puzzle[y][x]);
             grid.push(puzzle[y][x + 1]);
             grid.push(puzzle[y][x + 2]);
@@ -228,7 +228,25 @@ function canSafeAssign(puzzle: SudokuBoard, row: number, column: number, value: 
     return true;
 }
 
-function createPuzzle(difficulty: Difficulty): SudokuBoard {
+function isDigitComplete(board: SudokuBoard, row: number, column: number): boolean {
+    const currentRow = board[row];
+    const currentColumn = toColumns(board)[column];
+
+    const startRow = (row - (row % 3)) / 3;
+    const startColumn = (column - (column % 3)) / 3;
+    const gridIndex = startRow * startColumn;
+    const grid = toGrid(board)[gridIndex];
+
+    console.info(startRow);
+    console.info(startColumn);
+    console.info(gridIndex);
+
+    const hasAllNumber = [currentRow, currentColumn, grid].every((_) => Array.from(new Set([..._])).length === 9);
+
+    return [...currentColumn, ...currentRow, ...grid].some((_) => _ === null) && hasAllNumber;
+}
+
+function createPuzzle(difficulty: Difficulty): { board: SudokuBoard; answer: CompleteSudokuBoard } {
     const puzzle: SudokuBoard = cipherPuzzle(generatePuzzle());
 
     let digitToRemove;
@@ -252,12 +270,17 @@ function createPuzzle(difficulty: Difficulty): SudokuBoard {
     }
 
     let playablePuzzle = removeDigit(puzzle, digitToRemove);
+    let solution = solvable(playablePuzzle);
 
-    while (!solvable(playablePuzzle).solvable) {
+    while (!solution.solvable) {
         playablePuzzle = removeDigit(puzzle, digitToRemove);
+        solution = solvable(playablePuzzle);
     }
 
-    return playablePuzzle;
+    return {
+        board: playablePuzzle,
+        answer: solution.answer,
+    };
 }
 
 function removeDigit(_puzzle: SudokuBoard, numberToRemove: number): SudokuBoard {
@@ -294,15 +317,6 @@ function hasDuplicate(board: SudokuBoard, row: number, column: number): boolean 
     const currentColumn = columns[column];
     const currentRow = board[row];
 
-    if (row === 8) console.info(column);
-
-    if (row === 8 && column === 8) {
-        console.info(columns);
-        console.info(currentColumn);
-        console.info(currentRow);
-    }
-
-    // BUG
     const isRowDuplicate = currentColumn.some((_, index) => _ === value && index !== row);
     const isColumnDuplicate = currentRow.some((_, index) => _ === value && index !== column);
 
@@ -338,4 +352,6 @@ export const SudokuUtil = Object.freeze({
     log,
     hasDuplicate,
     difficultyTranslate,
+    canSafeAssign,
+    isDigitComplete,
 });

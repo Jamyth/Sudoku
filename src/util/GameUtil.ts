@@ -1,6 +1,6 @@
-import { CompleteSudokuBoard, SudokuUtil } from "./SudokuUtil";
-import type { SudokuBoard, Difficulty } from "./SudokuUtil";
 import { ArrayUtil } from "@iamyth/util";
+import { SudokuUtil } from "./SudokuUtil";
+import type { SudokuBoard, Difficulty, CompleteSudokuBoard } from "./SudokuUtil";
 
 export interface InteractSudoku {
     value: number | null;
@@ -18,8 +18,9 @@ export enum ActionMode {
 
 export type PlayableSudokuBoard = InteractSudoku[][];
 
-function createBoard(difficulty: Difficulty): PlayableSudokuBoard {
-    return toPlayableSudokuBoard(SudokuUtil.createPuzzle(difficulty));
+function createBoard(difficulty: Difficulty): { board: PlayableSudokuBoard; answer: CompleteSudokuBoard } {
+    const { board, answer } = SudokuUtil.createPuzzle(difficulty);
+    return { board: toPlayableSudokuBoard(board), answer };
 }
 
 function toPureSudokuBoard(board: PlayableSudokuBoard): SudokuBoard {

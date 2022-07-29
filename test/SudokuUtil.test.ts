@@ -124,4 +124,23 @@ describe("SudokuUtil", () => {
         assert.deepEqual(hasDuplicateColumn, true);
         assert.deepEqual(dontHaveDuplicate, false);
     });
+
+    it("validate Row and Column and Grid", () => {
+        const wrongDummyPuzzle = [
+            [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            [4, 2, 6, 7, 8, 9, 1, 2, 3],
+            [7, 8, 9, 1, 2, 3, 4, 5, 6],
+            [2, 3, 4, 5, 6, 7, 8, 9, 1],
+            [5, 6, 7, 8, 9, 1, 2, 3, 4],
+            [8, 9, 1, 2, 3, 4, 5, 6, 7],
+            [3, 4, 5, 6, 7, 8, 9, 1, 2],
+            [6, 7, 8, 9, 1, 2, 3, 4, 5],
+            [9, 1, 2, 3, 4, 5, 6, 7, 8],
+        ];
+        const isPass = SudokuUtil.isDigitComplete(dummyPuzzle, 8, 7);
+        const notPass = SudokuUtil.isDigitComplete(wrongDummyPuzzle, 2, 2);
+
+        assert.deepEqual(isPass, true);
+        assert.deepEqual(notPass, false);
+    });
 });
