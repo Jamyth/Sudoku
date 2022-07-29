@@ -232,18 +232,12 @@ function isDigitComplete(board: SudokuBoard, row: number, column: number): boole
     const currentRow = board[row];
     const currentColumn = toColumns(board)[column];
 
-    const startRow = (row - (row % 3)) / 3;
-    const startColumn = (column - (column % 3)) / 3;
-    const gridIndex = startRow * startColumn;
+    const gridIndex = Math.floor(row / 3) * 3 + Math.floor(column / 3);
     const grid = toGrid(board)[gridIndex];
-
-    console.info(startRow);
-    console.info(startColumn);
-    console.info(gridIndex);
 
     const hasAllNumber = [currentRow, currentColumn, grid].every((_) => Array.from(new Set([..._])).length === 9);
 
-    return [...currentColumn, ...currentRow, ...grid].some((_) => _ === null) && hasAllNumber;
+    return [...currentColumn, ...currentRow, ...grid].every((_) => _ !== null) && hasAllNumber;
 }
 
 function createPuzzle(difficulty: Difficulty): { board: SudokuBoard; answer: CompleteSudokuBoard } {
@@ -318,7 +312,7 @@ function hasDuplicate(board: SudokuBoard, row: number, column: number): boolean 
     const currentRow = board[row];
 
     const isRowDuplicate = currentColumn.some((_, index) => _ === value && index !== row);
-    const isColumnDuplicate = currentRow.some((_, index) => _ === value && index !== column);
+    const isColumnDuplicate = currentRow.some((_, index) => _ === value && index !== row);
 
     return isRowDuplicate || isColumnDuplicate;
 }
