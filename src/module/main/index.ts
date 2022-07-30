@@ -1,7 +1,7 @@
 import { Module, register } from "react-shiba";
 import { Main } from "./Main";
+import { Difficulty } from "util/SudokuUtil";
 import type { State, Path } from "./type";
-import { Difficulty } from "../../util/SudokuUtil";
 
 const initialState: State = {
     passedGame: {

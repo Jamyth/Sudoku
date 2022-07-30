@@ -13,7 +13,7 @@ const initialState: State = {
     answer: null,
     selectedCell: null,
     selectedMode: null,
-    tipsQuota: 81,
+    tipsQuota: 5,
     errorCount: 3,
     isVictory: false,
 };
@@ -70,23 +70,17 @@ class ModuleGameModule extends Module<Path, State> {
         }
 
         if (mode === ActionMode.TIPS && !isFinishedBoard && tipsQuota > 0) {
-            let randomRow = Math.floor(Math.random() * 8);
-            let randomColumn = Math.floor(Math.random() * 8);
-            let cell = board[randomRow][randomColumn];
-            while (cell.isGenerated || cell.value !== null) {
-                randomRow = Math.floor(Math.random() * 9);
-                randomColumn = Math.floor(Math.random() * 9);
-                cell = board[randomRow][randomColumn];
-            }
-
-            const value = answer[randomRow][randomColumn];
+            const emptyCells = board.reduce((acc, curr) => [...acc, ...curr], []).filter((_) => _.value === null);
+            const randomCellIndex = Math.floor(Math.random() * emptyCells.length);
+            const cell = emptyCells[randomCellIndex];
+            const value = answer[cell.row][cell.column];
             this.setState((state) => {
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- checked
-                state.board![randomRow][randomColumn] = {
+                state.board![cell.row][cell.column] = {
                     value,
                     isGenerated: true,
-                    row: randomRow,
-                    column: randomColumn,
+                    row: cell.row,
+                    column: cell.column,
                     draft: [],
                 };
                 state.tipsQuota--;
@@ -151,6 +145,14 @@ class ModuleGameModule extends Module<Path, State> {
     checkIsVictory() {
         const { board, answer, difficulty } = this.state;
         if (!board || !answer || !difficulty) {
+            return;
+        }
+        const isFinishedBoard = GameUtil.toPureSudokuBoard(board)
+            .reduce((acc, curr) => {
+                return [...acc, ...curr];
+            }, [])
+            .every((_) => _ !== null);
+        if (!isFinishedBoard) {
             return;
         }
         const isVictory = GameUtil.isVictory(board, answer);
