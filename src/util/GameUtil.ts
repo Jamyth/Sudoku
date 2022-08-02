@@ -1,4 +1,4 @@
-import { ArrayUtil } from "@iamyth/util";
+import { ArrayUtil } from "@iamyth/util/dist/cjs/core/ArrayUtil";
 import { SudokuUtil } from "./SudokuUtil";
 import type { SudokuBoard, Difficulty, CompleteSudokuBoard } from "./SudokuUtil";
 

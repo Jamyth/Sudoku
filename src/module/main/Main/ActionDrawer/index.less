@@ -4,12 +4,13 @@
     }
 
     .action-drawer-body {
-        padding-bottom: max(env(safe-area-inset-bottom), 15px);
+        padding-bottom: max(env(safe-area-inset-bottom), 30px);
         z-index: 1500;
 
         .button {
             text-align: center;
-            line-height: 45px;
+            line-height: 55px;
+            font-size: 18px;
             color: #3182ce;
 
             &:not(:first-of-type) {
@@ -20,10 +21,43 @@
         > .difficulty-selector {
             padding-left: 0;
             padding-right: 0;
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.75);
             border-radius: 10px;
             margin-bottom: 15px;
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(5px);
+
+            > .button {
+                position: relative;
+                height: 55px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+
+                &.locked {
+                    color: #718096;
+
+                    > img {
+                        top: 50%;
+                        left: 15px;
+                        position: absolute;
+                        width: 24px;
+                        transform: translateY(-50%);
+                    }
+
+                    > div {
+                        line-height: 1;
+
+                        &:first-of-type {
+                            margin-bottom: 5px;
+                        }
+
+                        &:not(:first-of-type) {
+                            font-size: 12px;
+                        }
+                    }
+                }
+            }
         }
 
         > .button {

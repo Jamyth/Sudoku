@@ -332,6 +332,21 @@ function difficultyTranslate(difficulty: Difficulty): string {
     }
 }
 
+function unlockRoundNumber(difficulty: Difficulty): [Difficulty, number] {
+    switch (difficulty) {
+        case Difficulty.MEDIUM:
+            return [Difficulty.EASY, 3];
+        case Difficulty.HARD:
+            return [Difficulty.MEDIUM, 5];
+        case Difficulty.VERY_HARD:
+            return [Difficulty.HARD, 8];
+        case Difficulty.HELL:
+            return [Difficulty.VERY_HARD, 11];
+        default:
+            return [Difficulty.EASY, 0];
+    }
+}
+
 export const SudokuUtil = Object.freeze({
     generateNumber,
     sliceToEnd,
@@ -348,4 +363,5 @@ export const SudokuUtil = Object.freeze({
     difficultyTranslate,
     canSafeAssign,
     isDigitComplete,
+    unlockRoundNumber,
 });

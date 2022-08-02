@@ -3,7 +3,7 @@ import path from "path";
 
 new ViteRunner({
     port: 8080,
-    https: true,
+    https: false,
     projectDirectory: path.join(__dirname, ".."),
     tsconfigPath: path.join(__dirname, "../config/tsconfig.src.json"),
     useReact: true,

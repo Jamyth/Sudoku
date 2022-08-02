@@ -5,7 +5,8 @@ import { ActionMode, GameUtil } from "util/GameUtil";
 import { actions as mainActions } from "module/main";
 import type { Location } from "react-shiba";
 import type { State, Path, HistoryState } from "./type";
-import { ArrayUtil } from "@iamyth/util";
+import { ArrayUtil } from "@iamyth/util/dist/cjs/core/ArrayUtil";
+import { GAME_STORAGE_KEY } from "util/StorageKey";
 
 const initialState: State = {
     difficulty: null,
@@ -21,12 +22,15 @@ const initialState: State = {
 class ModuleGameModule extends Module<Path, State> {
     override onLocationMatched(routeParams: object, location: Location<HistoryState>): void {
         const difficulty = location.state?.difficulty;
-
+        const rawData = localStorage.getItem(GAME_STORAGE_KEY);
+        if (!difficulty && rawData) {
+            this.setState(JSON.parse(rawData));
+            return;
+        }
         if (!difficulty) {
             this.pushHistory("/");
             return;
         }
-
         const { board, answer } = GameUtil.createBoard(difficulty);
 
         this.setState({
@@ -35,6 +39,8 @@ class ModuleGameModule extends Module<Path, State> {
             answer,
             difficulty,
         });
+
+        this.saveGame();
     }
 
     selectMode(mode: ActionMode) {
@@ -133,12 +139,15 @@ class ModuleGameModule extends Module<Path, State> {
             };
         }
         this.setState((state) => {
-            state.errorCount = value === correctAnswer ? state.errorCount : state.errorCount - 1;
+            if (state.selectedMode === null && selectedCell.value !== value) {
+                state.errorCount = value === correctAnswer ? state.errorCount : state.errorCount - 1;
+            }
             state.selectedCell = cell;
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- checked
             state.board![row][column] = cell;
         });
 
+        this.saveGame();
         this.checkIsVictory();
     }
 
@@ -158,8 +167,13 @@ class ModuleGameModule extends Module<Path, State> {
         const isVictory = GameUtil.isVictory(board, answer);
         if (isVictory) {
             mainActions.completeGame(difficulty);
+            localStorage.removeItem(GAME_STORAGE_KEY);
         }
         this.setState({ isVictory });
+    }
+
+    private saveGame() {
+        localStorage.setItem(GAME_STORAGE_KEY, JSON.stringify(this.state));
     }
 }
 

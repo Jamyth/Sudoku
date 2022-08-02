@@ -1,7 +1,7 @@
 import React from "react";
 import { useModuleGameState } from "module/game/hooks";
 import { actions } from "module/game";
-import { EnumUtil } from "@iamyth/util";
+import { EnumUtil } from "@iamyth/util/dist/cjs/core/EnumUtil";
 import { ActionMode, GameUtil } from "util/GameUtil";
 import { ToolTip } from "./ToolTip";
 import "./index.less";

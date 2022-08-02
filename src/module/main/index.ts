@@ -14,9 +14,15 @@ const initialState: State = {
     drawerOpened: false,
 };
 
+const STORAGE_KEY = "@@iamyth-sudoku/data";
+
 class MainModule extends Module<Path, State> {
     override onEnter() {
-        // TODO
+        const rawData = localStorage.getItem(STORAGE_KEY);
+        if (rawData) {
+            const data: State["passedGame"] = JSON.parse(rawData);
+            this.setState({ passedGame: data });
+        }
     }
 
     openDrawer(difficulty?: Difficulty) {
@@ -27,13 +33,16 @@ class MainModule extends Module<Path, State> {
         this.setState({ drawerOpened: false });
     }
 
-    toGame(difficulty: Difficulty) {
+    toGame(difficulty?: Difficulty) {
         this.pushHistory("/game", { difficulty });
         this.closeDrawer();
     }
 
     completeGame(difficulty: Difficulty) {
-        this.setState((state) => state.passedGame[difficulty]++);
+        this.setState((state) => {
+            state.passedGame[difficulty]++;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state.passedGame));
+        });
     }
 }
 
