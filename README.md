@@ -19,28 +19,28 @@ She ask me to DIY one, so there it is.
 ## Functionalities & Demo Pictures
 
 <h4>Home Page</h4>
-<img src="/readme/home.jpeg" />
+<img width="180px" src="/readme/home.jpeg" />
 
 <h4>Difficulty Selector</h4>
-<img src="/readme/difficulty-selector.jpeg" />
+<img width="180px" src="/readme/difficulty-selector.jpeg" />
 
 <h4>Game Scene</h4>
-<img src="/readme/select-field.jpeg" />
+<img width="180px" src="/readme/select-field.jpeg" />
 
 <h4>Drafting</h4>
-<img src="/readme/draft.jpeg" />
+<img width="180px" src="/readme/draft.jpeg" />
 
 <h4>Error</h4>
-<img src="/readme/error.jpeg" />
+<img width="180px" src="/readme/error.jpeg" />
 
 <h4>Pause</h4>
-<img src="/readme/pause.jpeg" />
+<img width="180px" src="/readme/pause.jpeg" />
 
 <h4>Game Over</h4>
-<img src="/readme/lost.jpeg" />
+<img width="180px" src="/readme/lost.jpeg" />
 
 <h4>Victory</h4>
-<img src="/readme/complete.jpeg" />
+<img width="180px" src="/readme/complete.jpeg" />
 
 <h4>Leader Board</h4>
-<img src="/readme/leader-board.jpeg" />
+<img width="180px" src="/readme/leader-board.jpeg" />
