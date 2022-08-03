@@ -7,6 +7,7 @@ import type { Location } from "react-shiba";
 import type { State, Path, HistoryState } from "./type";
 import { ArrayUtil } from "@iamyth/util/dist/cjs/core/ArrayUtil";
 import { GAME_STORAGE_KEY } from "util/StorageKey";
+import { SudokuUtil } from "util/SudokuUtil";
 
 const initialState: State = {
     difficulty: null,
@@ -17,6 +18,8 @@ const initialState: State = {
     tipsQuota: 5,
     errorCount: 3,
     isVictory: false,
+    elapsedTime: 0,
+    isPaused: false,
 };
 
 class ModuleGameModule extends Module<Path, State> {
@@ -41,6 +44,17 @@ class ModuleGameModule extends Module<Path, State> {
         });
 
         this.saveGame();
+    }
+
+    increaseTime() {
+        if (!this.state.isVictory && !this.state.isPaused) {
+            this.setState((state) => state.elapsedTime++);
+            this.saveGame();
+        }
+    }
+
+    pauseOrResumeGame() {
+        this.setState((state) => (state.isPaused = !state.isPaused));
     }
 
     selectMode(mode: ActionMode) {
@@ -106,6 +120,7 @@ class ModuleGameModule extends Module<Path, State> {
         this.setState({ selectedCell: cell });
     }
 
+    // eslint-disable-next-line sonarjs/cognitive-complexity -- fix later
     onNumberClick(value: number) {
         const board = this.state.board;
         const isDraftMode = this.state.selectedMode !== null;
@@ -137,6 +152,24 @@ class ModuleGameModule extends Module<Path, State> {
                 ...selectedCell,
                 value: selectedCell.value === value ? null : value,
             };
+        }
+
+        if (value === correctAnswer) {
+            board.forEach((row) => {
+                row.forEach((_) => {
+                    const isSameGrid = SudokuUtil.isInSameGrid(cell.row, cell.column, _.row, _.column);
+                    const isSameRow = cell.row === _.row;
+                    const isSameColumn = cell.column === _.column;
+                    const isSameBlock = isSameColumn && isSameRow;
+                    if ((isSameColumn || isSameRow || isSameGrid) && !isSameBlock && _.draft.includes(value)) {
+                        ArrayUtil.toggleElement(_.draft, value);
+                        const draftCell: InteractSudoku = JSON.parse(JSON.stringify(_));
+                        draftCell.draft = ArrayUtil.toggleElement(draftCell.draft, value);
+                        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- checked
+                        this.setState((state) => (state.board![draftCell.row][draftCell.column] = draftCell));
+                    }
+                });
+            });
         }
         this.setState((state) => {
             if (state.selectedMode === null && selectedCell.value !== value) {

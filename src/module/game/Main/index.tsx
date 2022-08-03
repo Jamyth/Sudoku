@@ -3,6 +3,7 @@ import { Board } from "./Board";
 import { Controls } from "./Controls";
 import { ErrorModal } from "./ErrorModal";
 import { VictoryModal } from "./VictoryModal";
+import { PauseModal } from "./PauseModal";
 import "./index.less";
 
 export const Main = React.memo(() => {
@@ -13,6 +14,7 @@ export const Main = React.memo(() => {
             <Controls />
             <ErrorModal />
             <VictoryModal />
+            <PauseModal />
         </div>
     );
 });

@@ -12,6 +12,8 @@ export interface State {
     tipsQuota: number;
     errorCount: number;
     isVictory: boolean;
+    elapsedTime: number;
+    isPaused: boolean;
 }
 
 export interface HistoryState {

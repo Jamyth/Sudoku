@@ -228,16 +228,24 @@ function canSafeAssign(puzzle: SudokuBoard, row: number, column: number, value: 
     return true;
 }
 
-function isDigitComplete(board: SudokuBoard, row: number, column: number): boolean {
+function getCorrespondingRowColumnGrid(board: SudokuBoard, row: number, column: number) {
     const currentRow = board[row];
     const currentColumn = toColumns(board)[column];
-
     const gridIndex = Math.floor(row / 3) * 3 + Math.floor(column / 3);
     const grid = toGrid(board)[gridIndex];
 
-    const hasAllNumber = [currentRow, currentColumn, grid].every((_) => Array.from(new Set([..._])).length === 9);
+    return {
+        row: currentRow,
+        column: currentColumn,
+        grid,
+    };
+}
 
-    return [...currentColumn, ...currentRow, ...grid].every((_) => _ !== null) && hasAllNumber;
+function isDigitComplete(board: SudokuBoard, rowIndex: number, columnIndex: number): boolean {
+    const { row, column, grid } = getCorrespondingRowColumnGrid(board, rowIndex, columnIndex);
+    const hasAllNumber = [row, column, grid].every((_) => Array.from(new Set([..._])).length === 9);
+
+    return [...column, ...row, ...grid].every((_) => _ !== null) && hasAllNumber;
 }
 
 function createPuzzle(difficulty: Difficulty): { board: SudokuBoard; answer: CompleteSudokuBoard } {
@@ -298,6 +306,20 @@ function log(puzzle: SudokuBoard) {
         console.info(_.join(" | "));
         console.info("-   -   -   -   -   -   -   -   -");
     });
+}
+
+function isInSameGrid(
+    targetRowIndex: number,
+    targetColumnIndex: number,
+    currentRowIndex: number,
+    currentColumnIndex: number,
+) {
+    const targetTopLeftRowIndex = targetRowIndex - (targetRowIndex % 3);
+    const currentTopLeftRowIndex = currentRowIndex - (currentRowIndex % 3);
+    const targetTopLeftColumnIndex = targetColumnIndex - (targetColumnIndex % 3);
+    const currentTopLeftColumnIndex = currentColumnIndex - (currentColumnIndex % 3);
+
+    return targetTopLeftColumnIndex === currentTopLeftColumnIndex && targetTopLeftRowIndex === currentTopLeftRowIndex;
 }
 
 function hasDuplicate(board: SudokuBoard, row: number, column: number): boolean {
@@ -364,4 +386,6 @@ export const SudokuUtil = Object.freeze({
     canSafeAssign,
     isDigitComplete,
     unlockRoundNumber,
+    getCorrespondingRowColumnGrid,
+    isInSameGrid,
 });

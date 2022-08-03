@@ -14,6 +14,11 @@
     .info {
         display: flex;
         justify-content: space-between;
+
+        > span.pause {
+            color: #2d3748;
+            font-weight: bold;
+        }
     }
 
     .board {
@@ -39,6 +44,28 @@
                     border-bottom: 2px solid black;
                 }
             }
+        }
+    }
+}
+
+.game-modal {
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+
+    > div {
+        padding: 0;
+
+        h1 {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        p {
+            font-size: 0.9rem;
+            color: #2d3748;
+            margin-bottom: 10px;
         }
     }
 }

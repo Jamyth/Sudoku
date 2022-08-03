@@ -15,7 +15,7 @@ export const VictoryModal = React.memo(() => {
     return (
         <Modal size="xs" isCentered isOpen={isVictory} onClose={() => {}}>
             <ModalOverlay />
-            <ModalContent className="victory-modal">
+            <ModalContent className="game-modal">
                 <ModalBody>
                     <h1>恭喜你</h1>
                     <p>
