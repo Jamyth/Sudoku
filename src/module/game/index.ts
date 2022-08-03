@@ -20,6 +20,7 @@ const initialState: State = {
     isVictory: false,
     elapsedTime: 0,
     isPaused: false,
+    lastBestTime: 0,
 };
 
 class ModuleGameModule extends Module<Path, State> {
@@ -35,19 +36,21 @@ class ModuleGameModule extends Module<Path, State> {
             return;
         }
         const { board, answer } = GameUtil.createBoard(difficulty);
+        const lastBestTime = GameUtil.getBestTime(difficulty) ?? 0;
 
         this.setState({
             ...initialState,
             board,
             answer,
             difficulty,
+            lastBestTime,
         });
 
         this.saveGame();
     }
 
     increaseTime() {
-        if (!this.state.isVictory && !this.state.isPaused) {
+        if (!this.state.isVictory && !this.state.isPaused && this.state.errorCount > 0) {
             this.setState((state) => state.elapsedTime++);
             this.saveGame();
         }
@@ -185,10 +188,11 @@ class ModuleGameModule extends Module<Path, State> {
     }
 
     checkIsVictory() {
-        const { board, answer, difficulty } = this.state;
+        const { board, answer, difficulty, elapsedTime } = this.state;
         if (!board || !answer || !difficulty) {
             return;
         }
+        const lastBestTime = GameUtil.getBestTime(difficulty) ?? Infinity;
         const isFinishedBoard = GameUtil.toPureSudokuBoard(board)
             .reduce((acc, curr) => {
                 return [...acc, ...curr];
@@ -201,6 +205,9 @@ class ModuleGameModule extends Module<Path, State> {
         if (isVictory) {
             mainActions.completeGame(difficulty);
             localStorage.removeItem(GAME_STORAGE_KEY);
+            if (lastBestTime > elapsedTime) {
+                mainActions.updateBestTime(difficulty, elapsedTime);
+            }
         }
         this.setState({ isVictory });
     }

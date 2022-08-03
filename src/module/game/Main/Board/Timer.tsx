@@ -1,12 +1,10 @@
 import { useModuleGameState } from "module/game/hooks";
 import React from "react";
 import { actions } from "module/game";
+import { GameUtil } from "util/GameUtil";
 
 export const Timer = React.memo(() => {
     const elapsedTime = useModuleGameState((state) => state.elapsedTime);
-
-    const minutes = Math.floor(elapsedTime / 60);
-    const second = elapsedTime % 60;
 
     React.useEffect(() => {
         const timer = setInterval(() => actions.increaseTime(), 1000);
@@ -16,9 +14,5 @@ export const Timer = React.memo(() => {
         };
     }, []);
 
-    return (
-        <span>
-            {minutes.toString().padStart(2, "0")} : {second.toString().padStart(2, "0")}
-        </span>
-    );
+    return <span>{GameUtil.toTimeString(elapsedTime)}</span>;
 });

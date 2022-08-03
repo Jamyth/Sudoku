@@ -14,6 +14,7 @@ export interface State {
     isVictory: boolean;
     elapsedTime: number;
     isPaused: boolean;
+    lastBestTime: number;
 }
 
 export interface HistoryState {

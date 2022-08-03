@@ -1,6 +1,7 @@
 import { ArrayUtil } from "@iamyth/util/dist/cjs/core/ArrayUtil";
 import { SudokuUtil } from "./SudokuUtil";
-import type { SudokuBoard, Difficulty, CompleteSudokuBoard } from "./SudokuUtil";
+import type { SudokuBoard, CompleteSudokuBoard, Difficulty } from "./SudokuUtil";
+import { BEST_TIME_KEY } from "./StorageKey";
 
 export interface InteractSudoku {
     value: number | null;
@@ -70,6 +71,29 @@ function getInteractSudokuOf(board: PlayableSudokuBoard, value: number): Interac
     return sudoku;
 }
 
+function getBestTime(): Record<Difficulty, number> | null;
+function getBestTime(difficulty: Difficulty): number | null;
+function getBestTime(difficulty?: Difficulty) {
+    const rawData = localStorage.getItem(BEST_TIME_KEY);
+    if (rawData) {
+        const data: Record<Difficulty, number> = JSON.parse(rawData);
+        if (difficulty) {
+            return data[difficulty];
+        }
+
+        return data;
+    }
+
+    return null;
+}
+
+function toTimeString(time: number) {
+    const minutes = Math.floor(time / 60);
+    const second = time % 60;
+
+    return `${minutes.toString().padStart(2, "0")} : ${second.toString().padStart(2, "0")}`;
+}
+
 export const GameUtil = Object.freeze({
     toPureSudokuBoard,
     toPlayableSudokuBoard,
@@ -77,4 +101,6 @@ export const GameUtil = Object.freeze({
     translateActionMode,
     getInteractSudokuOf,
     isVictory,
+    getBestTime,
+    toTimeString,
 });

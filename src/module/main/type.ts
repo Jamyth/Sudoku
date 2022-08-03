@@ -5,4 +5,5 @@ export type Path = never;
 export interface State {
     passedGame: Record<Difficulty, number>;
     drawerOpened: boolean | Difficulty;
+    bestTime: Record<Difficulty, number>;
 }

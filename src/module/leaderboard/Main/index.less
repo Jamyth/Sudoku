@@ -1,0 +1,51 @@
+.leaderboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    padding: 0 15px;
+    background-color: #e2e8f0;
+    row-gap: 2.5rem;
+
+    > h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-top: 2rem;
+    }
+
+    > .content {
+        width: 100%;
+        height: 60vh;
+        display: flex;
+        flex-direction: column;
+        row-gap: 15px;
+        overflow-y: auto;
+
+        > div {
+            > span {
+                font-size: 20px;
+                font-weight: bold;
+            }
+
+            > div {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px;
+                background-color: #cbd5e0;
+                border-radius: 5px;
+
+                &:first-of-type {
+                    margin-bottom: 5px;
+                }
+
+                > span {
+                    line-height: 30px;
+
+                    &:first-of-type {
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+    }
+}
