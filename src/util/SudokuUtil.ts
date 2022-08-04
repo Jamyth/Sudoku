@@ -254,21 +254,26 @@ function createPuzzle(difficulty: Difficulty): { board: SudokuBoard; answer: Com
     let digitToRemove;
 
     switch (difficulty) {
-        case Difficulty.EASY:
+        case Difficulty.EASY: {
             digitToRemove = 42;
             break;
-        case Difficulty.MEDIUM:
+        }
+        case Difficulty.MEDIUM: {
             digitToRemove = 51;
             break;
-        case Difficulty.HARD:
+        }
+        case Difficulty.HARD: {
             digitToRemove = 60;
             break;
-        case Difficulty.VERY_HARD:
+        }
+        case Difficulty.VERY_HARD: {
             digitToRemove = 65;
             break;
-        case Difficulty.HELL:
+        }
+        case Difficulty.HELL: {
             digitToRemove = 69;
             break;
+        }
     }
 
     let playablePuzzle = removeDigit(puzzle, digitToRemove);

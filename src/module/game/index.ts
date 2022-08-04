@@ -157,7 +157,7 @@ class ModuleGameModule extends Module<Path, State> {
             };
         }
 
-        if (value === correctAnswer && this.selectMode === null) {
+        if (value === correctAnswer && this.state.selectedMode !== ActionMode.DRAFT) {
             board.forEach((row) => {
                 row.forEach((_) => {
                     const isSameGrid = SudokuUtil.isInSameGrid(cell.row, cell.column, _.row, _.column);
