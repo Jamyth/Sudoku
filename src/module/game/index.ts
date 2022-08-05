@@ -5,7 +5,7 @@ import { ActionMode, GameUtil } from "util/GameUtil";
 import { actions as mainActions } from "module/main";
 import type { Location } from "react-shiba";
 import type { State, Path, HistoryState } from "./type";
-import { ArrayUtil } from "@iamyth/util/dist/cjs/core/ArrayUtil";
+import { ArrayUtil } from "@iamyth/util";
 import { GAME_STORAGE_KEY } from "util/StorageKey";
 import { SudokuUtil } from "util/SudokuUtil";
 

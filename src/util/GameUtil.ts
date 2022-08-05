@@ -1,4 +1,4 @@
-import { ArrayUtil } from "@iamyth/util/dist/cjs/core/ArrayUtil";
+import { ArrayUtil } from "@iamyth/util";
 import { SudokuUtil } from "./SudokuUtil";
 import type { SudokuBoard, CompleteSudokuBoard, Difficulty } from "./SudokuUtil";
 import { BEST_TIME_KEY } from "./StorageKey";

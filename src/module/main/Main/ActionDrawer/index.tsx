@@ -1,7 +1,7 @@
 import React from "react";
 import { Drawer, DrawerOverlay, DrawerContent, DrawerBody } from "@chakra-ui/react";
 import { Difficulty, SudokuUtil } from "util/SudokuUtil";
-import { EnumUtil } from "@iamyth/util/dist/cjs/core/EnumUtil";
+import { EnumUtil } from "@iamyth/util";
 import { useMainState } from "module/main/hooks";
 import { actions as mainActions } from "module/main";
 import Lock from "./asset/lock.svg";

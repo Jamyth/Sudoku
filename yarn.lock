@@ -1693,10 +1693,10 @@
   resolved "https://registry.yarnpkg.com/@iamyth/prettier-config/-/prettier-config-0.0.2.tgz#3d5d5253f68a2ba79fee03cfd641e1d725f73ef6"
   integrity sha512-5T0bAoCo/zq82X6iT4hWR4G5tldgWN/ML89YCSxrU3TOk9rvVb+d5wLStX61GbUyBthxh3/Cq45ZOll7FGLI3A==
 
-"@iamyth/util@1.1.8":
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/@iamyth/util/-/util-1.1.8.tgz#66dd8c9f46f3580aa1d8ec33b9cf5dd8d74ff502"
-  integrity sha512-vmJpz1jSvJK0Im4IAhvFOU7S9Tj3BM45i7L3kwRDST/k3s+RkpgVqwKU0aTAVyY1PWpVuZbciKo4pu8Mcnzwmw==
+"@iamyth/util@1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@iamyth/util/-/util-1.2.1.tgz#88637c56cd50f0fb13f4fadded3e0f39fcc7e7ef"
+  integrity sha512-AhIV/eCzBB0XSzs/QbkcKVuVsM5BPAdxANOCgp8QRsJAcE5nxWj/B0k/z5NWHR2GoD3ccB3zUp1hgJEg3slNJw==
 
 "@jridgewell/gen-mapping@^0.1.0":
   version "0.1.1"
@@ -1955,10 +1955,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.6.2.tgz#ffc5f0f099d27887c8d9067b54e55090fcd54126"
   integrity sha512-KcfkBq9H4PI6Vpu5B/KoPeuVDAbmi+2mDBqGPGUgoL7yXQtcWGu2vJWmmRkneWK3Rh0nIAX192Aa87AqKHYChQ==
 
-"@types/node@18.6.3":
-  version "18.6.3"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.6.3.tgz#4e4a95b6fe44014563ceb514b2598b3e623d1c98"
-  integrity sha512-6qKpDtoaYLM+5+AFChLhHermMQxc3TOEFIDzrZLPRGHPrLEwqFkkT5Kx3ju05g6X7uDPazz3jHbKPX0KzCjntg==
+"@types/node@18.6.4":
+  version "18.6.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.6.4.tgz#fd26723a8a3f8f46729812a7f9b4fc2d1608ed39"
+  integrity sha512-I4BD3L+6AWiUobfxZ49DlU43gtI+FTHSv9pE2Zekg6KjMpre4ByusaljW3vYSLJrvQ1ck1hUaeVu8HVlY3vzHg==
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"

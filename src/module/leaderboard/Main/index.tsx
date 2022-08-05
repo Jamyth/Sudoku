@@ -1,5 +1,5 @@
 import { Button } from "@chakra-ui/react";
-import { ObjectUtil } from "@iamyth/util/dist/cjs/core/ObjectUtil";
+import { ObjectUtil } from "@iamyth/util";
 import { useMainState } from "module/main/hooks";
 import React from "react";
 import { GameUtil } from "util/GameUtil";
