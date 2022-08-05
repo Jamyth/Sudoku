@@ -26,7 +26,7 @@ export const ActionDrawer = React.memo(() => {
                                         <div
                                             className={`button ${isLocked ? "locked" : ""}`}
                                             key={_}
-                                            onClick={!isLocked ? () => mainActions.toGame(_) : undefined}
+                                            onClick={isLocked ? undefined : () => mainActions.toGame(_)}
                                         >
                                             {isLocked && <img src={Lock} />}
                                             <div>{SudokuUtil.difficultyTranslate(_)}</div>
