@@ -362,11 +362,11 @@ function difficultyTranslate(difficulty: Difficulty): string {
 function unlockRoundNumber(difficulty: Difficulty): [Difficulty, number] {
     switch (difficulty) {
         case Difficulty.MEDIUM:
-            return [Difficulty.EASY, 3];
+            return [Difficulty.EASY, 0];
         case Difficulty.HARD:
-            return [Difficulty.MEDIUM, 5];
+            return [Difficulty.MEDIUM, 0];
         case Difficulty.VERY_HARD:
-            return [Difficulty.HARD, 8];
+            return [Difficulty.HARD, 0];
         case Difficulty.HELL:
             return [Difficulty.VERY_HARD, 11];
         default:
